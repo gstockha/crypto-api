@@ -13,9 +13,11 @@ function getCrypto(){
     fetch(fetchCrypto).then((response)=>{
         response.json().then((data)=>{
             cryptoBrick = data.rates;
-            cryptoKeys = Object.keys(cryptoBrick);
             console.log(cryptoBrick);
-            compareRates(cryptoBrick,defaultCrypto,"USD");
+            cryptoBrick["USD"] = 1.00;
+            cryptoKeys = Object.keys(cryptoBrick);
+            //multRate = cryptoBrick[defaultCrypto];
+            compareRates(cryptoBrick,0,defaultCrypto,"USD");
             return cryptoBrick;
         })
     })
@@ -24,55 +26,63 @@ function getCrypto(){
     });
 }
 
-function compareRates(obj,rate1,rate2){
-    let usdRate = "1.00";
-    let target1 = usdRate;
-    let target2 = usdRate;
-    if (rate1 !== "USD"){
+function compareRates(obj,targRate,rate1,rate2){
+    let target1 = 1;
+    let target2 = 1;
+    if (targRate != -1){ //not default
         target1 = obj[rate1];
-        if (target1){ //if valid
-            target1 = multRateRound(target1);
-        }
-    }
-    if (rate2 !== "USD"){
         target2 = obj[rate2];
-        if (target2){
-            target2 = multRateRound(target2);
+        if (target1 && target2){
+            if (targRate == 0){
+                target2 = (target1 * multRate / target2).toFixed(roundNum);
+                target1 = (target1 * multRate / target1).toFixed(roundNum);
+            }
+            if (targRate == 1){
+                target1 = (target2 * multRate / target1).toFixed(roundNum);
+                target2 = (target2 * multRate / target2).toFixed(roundNum);
+            }
+        }
+        else{
+            target1 = 1;
+            target2 = 1;
         }
     }
     let compare = [target1 + " " + rate1,target2 + " " + rate2];
     appendRates(compare);
 }
 
-function appendRates(compare){
-    for (let i = 0; i < 2; i++) $price[i].empty().append(compare[i]);
-}
-
-function multRateRound(rate){
-    return (rate * multRate).toFixed(roundNum);
-}
-
 function getSearch(event){
     event.preventDefault();
     let str = ["",""];
-    let alrt;
+    let applyRate;
+    let target = -1;
+    multRate = 1;
     for (let i = 0; i < 2; i++){
-        alrt = false;
+        applyRate = false;
         str[i] = $search[i].value.trim();
         if ((str[i]) && (str[i] !== "")){ //if valid
             str[i] = str[i].toUpperCase();
-            if (cryptoKeys.includes(str[i]) === false) alrt = true;
-            else{
-                let rate = Number($count[i].value.trim());
-                if (!isNaN(rate) && (rate > 0)) multRate = rate;
-                console.log(multRate);
+            if ((cryptoKeys.includes(str[i]) === false) && (str[i] !== "USD")) alert("Currency " + (i + 1) + " not a valid entry!");
+            else applyRate = true;
+        }
+        else{ //default to USD
+            str[i] = "USD";
+        }
+        if (applyRate){
+            let rate = Number($count[i].value.trim());
+            if ((rate) && (rate !== "") && (!isNaN(rate)) && (rate > 0)){
+                multRate = rate;
+                target = i;
             }
         }
-        else alrt = true;
-        if (alrt) return alert("Currency " + (i + 1) + " not a valid entry!");
     }
+    console.log(target);
     console.log(str[0],str[1]);
-    compareRates(cryptoBrick,str[0],str[1]);
+    compareRates(cryptoBrick,target,str[0],str[1]);
+}
+
+function appendRates(compare){
+    for (let i = 0; i < 2; i++) $price[i].empty().append(compare[i]);
 }
 
 //only uncomment below when ready to test request, we have a limited number of requests!
