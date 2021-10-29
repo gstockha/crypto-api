@@ -37,7 +37,7 @@ function compareRates(obj,targRate,rate1,rate2){
                 target2 = (target1 * multRate / target2).toFixed(roundNum);
                 target1 = (target1 * multRate / target1).toFixed(roundNum);
             }
-            if (targRate == 1){
+            else if (targRate == 1){
                 target1 = (target2 * multRate / target1).toFixed(roundNum);
                 target2 = (target2 * multRate / target2).toFixed(roundNum);
             }
@@ -54,27 +54,25 @@ function compareRates(obj,targRate,rate1,rate2){
 function getSearch(event){
     event.preventDefault();
     let str = ["",""];
-    let applyRate;
     let target = -1;
     multRate = 1;
     for (let i = 0; i < 2; i++){
-        applyRate = false;
         str[i] = $search[i].value.trim();
         if ((str[i]) && (str[i] !== "")){ //if valid
             str[i] = str[i].toUpperCase();
             if ((cryptoKeys.includes(str[i]) === false) && (str[i] !== "USD")) alert("Currency " + (i + 1) + " not a valid entry!");
-            else applyRate = true;
+            else{
+                let rate = Number($count[i].value.trim());
+                if ((rate) && (rate !== "") && (!isNaN(rate)) && (rate > 0)){
+                    multRate = rate;
+                    target = i;
+                }
+            }
         }
         else{ //default to USD
             str[i] = "USD";
         }
-        if (applyRate){
-            let rate = Number($count[i].value.trim());
-            if ((rate) && (rate !== "") && (!isNaN(rate)) && (rate > 0)){
-                multRate = rate;
-                target = i;
-            }
-        }
+
     }
     console.log(target);
     console.log(str[0],str[1]);
