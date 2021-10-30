@@ -3,6 +3,7 @@ const $search = [document.querySelector("#search1"),document.querySelector("#sea
 const $price = [$("#price1"),$("#price2")]; //price display
 const $count = [document.querySelector("#number1"),document.querySelector("#number2")]; //currency number input field
 const $convert = $("#convert-btn"); //convert button
+const $stats = $("#stats"); //stat list
 let multRate = 1; //multiplication rate
 let defaultCrypto = "BTC";
 let roundNum = 2; //toFixed(2) rounds to nearest penny
@@ -17,12 +18,28 @@ function getCrypto(){ //initialization function
             cryptoBrick["USD"] = 1.00; //add USD to it
             cryptoKeys = Object.keys(cryptoBrick); //fill out an array of keys (crypto names like ETH, BTC, DOGE etc) for later
             compareRates(cryptoBrick,0,defaultCrypto,"USD"); //run a default compare function between BTC and USD
-            return cryptoBrick; //set the cryptoBrick object in the main scope
         })
     })
     .catch((error)=>{ //if api fails
         alert('Crypto info request denied!');
     });
+}
+
+function getStats(){
+    fetch('https://api.coinlore.net/api/global/').then((response)=>{
+        response.json().then((data)=>{
+            let stats = data[0];
+            console.log(stats);
+            $stats.append('<li>','<li>','<li>','<li>');
+            $stats.children('li')[0].append('Market Cap change: ' + stats.mcap_change +'%');
+            $stats.children('li')[1].append('Total Market Cap: ' + stats.total_mcap);
+            $stats.children('li')[2].append('Volume change: ' + stats.volume_change +'%');
+            $stats.children('li')[3].append('Total Volume: ' + stats.total_volume);
+        })
+    })
+    .catch((error)=>{
+        alert('Market stat request denied!');
+    })
 }
 
 function compareRates(obj,targRate,rate1,rate2){ //compare function
@@ -83,7 +100,8 @@ function appendRates(compare){ //append info to the dom
 }
 
 //only uncomment below when ready to test request, we have a limited number of requests!
-cryptoBrick = getCrypto(); //initialize API (on program start)
+//getCrypto(); //initialize API (on program start)
+getStats();
 
 $convert.on("click",getSearch); //search button
 //if entering in a value in an input field, delete the other value in the other input field
