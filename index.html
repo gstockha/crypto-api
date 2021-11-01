@@ -1,0 +1,92 @@
+<html lang="en">
+
+<head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Document</title>
+</head>
+
+
+
+
+
+<!--Import Google Icon Font-->
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<!--Import materialize.css-->
+<link type="text/css" rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css"
+        media="screen,projection" />
+<link type="text/css" rel="stylesheet" href="assets/style.css" />
+<!--Let browser know website is optimized for mobile-->
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+
+<body>
+        <div class="container cont">
+                <div class="row">
+                        <div class="col s5">
+                                <div class="row">
+                                        <div class="col s2"></div>
+                                        <div class="input-field col s8">
+                                                <input id="source" type="text" class="validate">
+                                                <label for="source"></label>
+                                        </div>
+                                        <div class="col s2"></div>
+                                </div>
+                                <div class="row card-panel">
+                                        <div class="col s2"></div>
+                                        <div class="input-field col s8">
+                                                <input id="value" type="text" class="validate center">
+                                                <label for="value">Value</label>
+                                        </div>
+                                        <div class="col s2"></div>
+                                        <div class="col s1"></div>
+                                        <div class="col s10 center-align">
+                                                <label class="row-src">BTN</label>
+                                        </div>
+                                        <div class="col s1"></div>
+                                </div>
+                        </div>
+                        <div class="col s2"></div>
+                        <div class="col s5">
+                                <div class="row">
+                                        <div class="col s2"></div>
+                                        <div class="input-field col s8">
+                                                <input id="dest" type="text" class="validate">
+                                                <label for="dest"></label>
+                                        </div>
+                                        <div class="col s2"></div>
+                                </div>
+                                <div class="row card-panel">
+                                        <div class="col s2"></div>
+                                        <div class="input-field col s8">
+                                                <input id="value2" type="text" class="validate center">
+                                                <label for="value2">Value</label>
+                                        </div>
+                                        <div class="col s2"></div>
+                                        <div class="col s1"></div>
+                                        <div class="col s10 center-align">
+                                                <label class="row-src">USD</label>
+                                        </div>
+                                        <div class="col s1"></div>
+                                </div>
+                        </div>
+
+                        <div class="col s12 card-panel">
+                                <div>
+                                        <canvas id="myChart"></canvas>
+                                </div>
+                        </div>
+
+                </div>
+        </div>
+
+        <!--JavaScript at end of body for optimized loading-->
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <script src="assets/script.js"></script>
+        <script type="text/javascript"
+                src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+</body>
+
+</html>
