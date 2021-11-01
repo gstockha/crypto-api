@@ -4,6 +4,7 @@
         <meta charset="UTF-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.6.0/Chart.min.js"></script>
         <link rel="stylesheet" href="assets/style.css">
         <title>Crypto Cross</title>
 
@@ -24,9 +25,43 @@
                 <input id="search2">Enter Currency 2</input>
             </div>
             <div>
-                <button id="convert-btn">Cross!</button>
+                <button id="convert-btn">Cross!</button> <!--convert button-->
             </div>
-            <div>
+            <div id="chart-container"> <!--put chart here-->
+                <canvas id="chart"></canvas>
+                <script>
+                    let $chart = document.getElementById("chart").getContext('2d');
+                    let cryptoChart = new Chart($chart, {
+                        type: 'bar',
+                        data:{
+                            labels:[],
+                            datasets:[{
+                                label: 'Price in USD',
+                                data:[],
+                                backgroundColor:[]
+                            }]
+                        },
+                        options:{
+                            title:{
+                                display:true,
+                                text:'Crypto to USD',
+                                fontSize:22
+                            },
+                            legend:{ 
+                                display:false
+                            },
+                            scales: {
+                                yAxes: [{
+                                    ticks: {
+                                        beginAtZero: true
+                                    }
+                                }]
+                            }
+                        }
+                    });
+                </script>
+            </div>
+            <div> <!--display market cap and other data PUT ON THE RIGHT SIDE?-->
                 <ul id="stats">
 
                 </ul>
