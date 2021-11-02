@@ -5,14 +5,16 @@ const $count = [document.querySelector("#number1"),document.querySelector("#numb
 const $convert = $("#convert-btn"); //convert button
 const $stats = $("#stats"); //stat list
 let multRate = 1; //multiplication rate
-let defaultCrypto = "DOGE";
+let defaultCrypto = ["DOGE","USD"];
+let defaultTarget = 0; //for comparison order
 let roundNum = 2; //toFixed(2) rounds to nearest penny
 let cryptoBrick = {}; //empty default cryptoAPI object
 let cryptoKeys = []; //empty cryptoBrick keys list
 let graphList = [];
 let lastList = [];
+let firstDraw = true; //don't save the draw graph on default draw
 
-function getCrypto(){ //initialization function
+function getCrypto(){ //initialization function to get crypto prices
     //fetch(fetchCrypto).then((response)=>{ //fetch response from crypto api
         //response.json().then((data)=>{ //convert from json
             cryptoBrick = { //DELETE THIS WHEN READY
@@ -408,7 +410,8 @@ function getCrypto(){ //initialization function
             console.log(cryptoBrick);
             cryptoBrick["USD"] = 1.00; //add USD to it
             cryptoKeys = Object.keys(cryptoBrick); //fill out an array of keys (crypto names like ETH, BTC, DOGE etc) for later
-            compareRates(cryptoBrick,0,defaultCrypto,"USD"); //run a default compare function between BTC and USD
+            compareRates(cryptoBrick,defaultTarget,defaultCrypto[0],defaultCrypto[1],false); //run a default compare function between BTC and USD
+            firstDraw = false;
         //})
     //})
     //.catch((error)=>{ //if api fails
@@ -821,7 +824,7 @@ function getStats(){ //get global market data
     })
 }
 
-function compareRates(obj,targRate,rate1,rate2){ //compare numbers & prices of crypto (math)
+function compareRates(obj,targRate,rate1,rate2,save){ //compare numbers & prices of crypto (math)
     let target1 = obj[rate1]; //get the two target currencies from the cryptoChunk
     let target2 = obj[rate2];
     if (targRate != -1){ //if you entered an input field number (not 1 or "")
@@ -841,11 +844,11 @@ function compareRates(obj,targRate,rate1,rate2){ //compare numbers & prices of c
         }
     }
     else{ //1:1 comparison
-        if (target1 !== target2){
+        if (target1 > target2){ //prioritize top element
             target2 = target1 / target2;
             target1 = 1;
         }
-        else{ //equals
+        else{
             target1 = 1;
             target2 = 1;
         }
@@ -859,9 +862,11 @@ function compareRates(obj,targRate,rate1,rate2){ //compare numbers & prices of c
     else round2 = round2.toFixed(4);
     let compare = [round1 + " " + rate1,round2 + " " + rate2]; //string array
     appendRates(compare); //append the strings
+    if (save) localStorage.setItem("compare",JSON.stringify([targRate,rate1,rate2]));
     //add their rate to USD to graph
-    addToGraph(rate1,obj[rate1]);
-    addToGraph(rate2,obj[rate2]);
+    lastList = saveLastList(graphList);
+    addGraphList(rate1,obj[rate1]);
+    addGraphList(rate2,obj[rate2]);
 }
 
 function getSearch(event){ //get the search string from input
@@ -890,26 +895,21 @@ function getSearch(event){ //get the search string from input
         }
     }
     console.log(target,str[0],str[1]);
-    compareRates(cryptoBrick,target,str[0],str[1]); //compare the new currencies and their rates
+    compareRates(cryptoBrick,target,str[0],str[1],true); //compare the new currencies and their rates
 }
 
 function appendRates(compare){ //append info to the dom
     for (let i = 0; i < 2; i++) $price[i].empty().append(compare[i]);
 }
 
-function keyExists(value){
-    return graphList.some(row => row.includes(value));
-}
-
-function addToGraph(key,value){ //add new value to graph
-    if ((key === "USD") || (keyExists(key))) return false;
-    if (graphList.length > 0) lastList = graphList;
+function addGraphList(key,value){ //add new value to graph
+    if ((key === "USD") || (graphList.some(row => row.includes(key)))) return false;
     graphList.unshift([key,value,rgbaRandom(.75)]); //add to beginning
     if (graphList.length > 20) graphList.pop(); //keep 20 or below
     drawOnGraph(graphList.length);
 }
 
-function drawOnGraph(length){
+function drawOnGraph(length){ //draw the graph
     if (length > 8) length = 8;
     cryptoChart.data.datasets[0].data = []; //clear data
     cryptoChart.data.labels = []; //clear labels
@@ -920,10 +920,10 @@ function drawOnGraph(length){
         cryptoChart.data.datasets[0].backgroundColor.push(graphList[i][2]); //add color
     }
     cryptoChart.update(); //update graph
-    console.log(lastList);
+    if (!firstDraw) localStorage.setItem("graphList",JSON.stringify(graphList));
 }
 
-function rgbaRandom(alpha) { //for graphs
+function rgbaRandom(alpha) { //for colored bars on graph
     let o, r, s;
     let c = [];
     let rand = Math.floor(Math.random() * 3);
@@ -937,44 +937,67 @@ function rgbaRandom(alpha) { //for graphs
     return 'rgba(' + c[0] + ',' + c[1] + ',' + c[2] + ',' + alpha + ')';
 }
 
-function undoGraph(event){
+function saveLastList(list){ //for undo button
+    let lastList = [];
+    if (list.length < 1) return lastList;
+    for (let i = 0; i < list.length; i++){
+        lastList[i] = list[i];
+    }
+    return lastList;
+}
+
+function loadStuff(){
+    let recent = JSON.parse(localStorage.getItem("compare"));
+    if (recent != null){
+        defaultTarget = recent[0];
+        defaultCrypto[0] = recent[1];
+        defaultCrypto[1] = recent[2];
+    }
+    let graph = JSON.parse(localStorage.getItem("graphList"));
+    if (graph != null){
+        for (let i = 0; i < graph.length; i++){
+            graphList[i] = graph[i];
+        }
+        drawOnGraph(graphList.length);
+    }
+}
+
+loadStuff();
+getCrypto(); //initialize API (on program start) only uncomment below when ready to test request, we have a limited number of requests!
+//getStats();
+
+$convert.on("click",getSearch); //search button
+$("#undo-graph").on("click",(event)=>{
     event.preventDefault;
     console.log('undo');
     if (lastList.length < 1) return false;
     let tempList = [];
     if (graphList.length > 0) tempList = graphList;
     graphList = lastList;
+    lastList = saveLastList(tempList);
     drawOnGraph(graphList.length);
-    lastList = tempList;
-}
-
-function clearGraph(event){
+});
+$("#clear-graph").on("click",(event)=>{
     event.preventDefault;
     if (graphList.length < 1) return false;
     console.log('clear');
-    lastList = graphList; //save
+    lastList = saveLastList(graphList); //save
     graphList = []; //clear
     drawOnGraph(0);
-}
-
-//only uncomment below when ready to test request, we have a limited number of requests!
-getCrypto(); //initialize API (on program start)
-//getStats();
-
-$convert.on("click",getSearch); //search button
-$("#undo-graph").on("click",undoGraph);
-$("#clear-graph").on("click",clearGraph);
+});
 $("#ascend-graph").on("click",(event)=>{
     event.preventDefault;
+    console.log('ascend');
     if (graphList.length < 2) return false;
-    lastList = graphList; //save
+    lastList = saveLastList(graphList); //save
     graphList = graphList.sort((a,b) => b[1] - a[1]); //sort list descending
     drawOnGraph(graphList.length);
 });
 $("#descend-graph").on("click",(event)=>{
     event.preventDefault;
+    console.log('descend');
     if (graphList.length < 2) return false;
-    lastList = graphList; //save
+    lastList = saveLastList(graphList); //save
     graphList = graphList.sort((a,b) => a[1] - b[1]); //sort list descending
     drawOnGraph(graphList.length);
 });
