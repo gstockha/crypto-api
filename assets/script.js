@@ -18,16 +18,40 @@ function getCrypto(){ //initialization function to get crypto prices
     fetch(fetchCrypto).then((response)=>{ //fetch response from crypto api
         response.json().then((data)=>{ //convert from json
             cryptoBrick = data.rates; //save the subobject 'rates' of the data object to our object 'cryptoBrick'
+            finishBrick();
             localStorage.setItem("brick",JSON.stringify(cryptoBrick));
         })
     })
     .catch((error)=>{ //if api fails, load last memoried one
         let crypto = JSON.parse(localStorage.getItem("brick"));
-        if (crypto != null) cryptoBrick = crypto;
-        else return alert("Couldn't get crypto data!");
+        if (crypto != null){
+            cryptoBrick = crypto;
+            finishBrick();
+        } 
+        else fetch('https://api.coinlore.net/api/tickers/').then((response)=>{ //if that fails, refer to other api
+            response.json().then((data)=>{
+                let symbol;
+                let target;
+                console.log(data);
+                for (let i = 0; i < data.data.length; i++){
+                    target = data.data[i];
+                    
+                    symbol = target["symbol"];
+                    cryptoBrick[symbol] = target["price_usd"];
+                }
+                localStorage.setItem("brick",JSON.stringify(cryptoBrick));
+                finishBrick();
+            })
+        })
+        .catch((error)=>{
+            alert('Crypto data not found!');
+        });
     });
+}
+
+function finishBrick(){ //finishing touches on cryptoBrick for the methods in above function
+    cryptoBrick["USD"] = 1.00; //add usd
     console.log(cryptoBrick);
-    cryptoBrick["USD"] = 1.00; //add USD to it
     cryptoKeys = Object.keys(cryptoBrick); //fill out an array of keys (crypto names like ETH, BTC, DOGE etc) for later
     compareRates(cryptoBrick,defaultTarget,defaultCrypto[0],defaultCrypto[1],false); //run a default compare function between BTC and USD
     firstDraw = false;
@@ -87,7 +111,7 @@ function compareRates(obj,targRate,rate1,rate2,save){ //compare numbers & prices
     if (round2 >= 1) round2 = round2.toFixed(2);
     else round2 = round2.toFixed(4);
     let compare = [round1 + " " + rate1,round2 + " " + rate2]; //string array
-    appendRates(compare); //append the strings
+    for (let i = 0; i < 2; i++) $price[i].empty().append(compare[i]); //append the strings
     if (save) localStorage.setItem("compare",JSON.stringify([targRate,rate1,rate2]));
     //add their rate to USD to graph
     lastList = saveLastList(graphList);
@@ -122,10 +146,6 @@ function getSearch(event){ //get the search string from input
     }
     console.log(target,str[0],str[1]);
     compareRates(cryptoBrick,target,str[0],str[1],true); //compare the new currencies and their rates
-}
-
-function appendRates(compare){ //append info to the dom
-    for (let i = 0; i < 2; i++) $price[i].empty().append(compare[i]);
 }
 
 function addGraphList(key,value){ //add new value to graph
@@ -190,7 +210,7 @@ function loadStuff(){
 
 loadStuff();
 getCrypto(); //initialize API (on program start) only uncomment below when ready to test request, we have a limited number of requests!
-//getStats();
+getStats();
 
 $convert.on("click",getSearch); //search button
 $("#undo-graph").on("click",(event)=>{
