@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.6.0/Chart.min.js"></script>
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Staatliches&display=swap" rel="stylesheet">
+        <link rel="iconsheet" href="https://cdnjs.cloudflare.com/ajax/libs/open-iconic/1.1.1/font/css/open-iconic-bootstrap.min.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+        <link rel="stylesheet" href="assets/style.css">
+        <title>Crypto Cross</title>
+
+    </head>
+    <body>
+        <header>
+            <h1>¢rypto Cross</h1>
+        </header>
+        <div class="validate center">
+        <div>
+            <div class="row card-panel">
+                <div class="col s6">
+                <h2 id="price1"></h2>
+                <input id="number1">Enter Currency Quantity</input>
+                <input id="search1">Enter First Currency</input>
+                </div>
+            
+                <div class="col s6">
+                <h2 id="price2"></h2>
+                <input id="number2">Enter Currency Quantity</input>
+                <input id="search2">Enter Second Currency</input>
+                </div>
+            </div>
+        </div>
+            <div>
+                <button id="convert-btn">¢ross!</button> <!--convert button-->
+            </div>
+            <div id="chart-container"> <!--put chart here-->
+                <canvas id="chart"></canvas>
+                <script>
+                    let $chart = document.getElementById("chart").getContext('2d');
+                    let cryptoChart = new Chart($chart, {
+                        type: 'bar',
+                        data:{
+                            labels:[],
+                            datasets:[{
+                                label: 'Price in USD',
+                                data:[],
+                                backgroundColor:[]
+                            }]
+                        },
+                        options:{
+                            title:{
+                                display:true,
+                                text:'Crypto to USD',
+                                fontSize:22
+                            },
+                            legend:{ 
+                                display:false
+                            },
+                            scales: {
+                                yAxes: [{
+                                    ticks: {
+                                        beginAtZero: true
+                                    }
+                                }]
+                            }
+                        }
+                    });
+                </script>
+                <div id="graph-buttons">
+                    <button id="ascend-graph" class="oi oi-arrow-thick-top mr-2"></button>
+                    <button id="descend-graph" class="oi oi-arrow-thick-bottom mr-2"></button>
+                    <button id="undo-graph" class="oi oi-undo mr-2"></button>
+                    <button id="clear-graph" class="oi oi-circle-x mr-2"></button>
+                </div>
+            </div>
+            <div> <!--display market cap and other data PUT ON THE RIGHT SIDE?-->
+                <ul id="stats">
+
+                </ul>
+            </div>
+        </div>
+    </div>
+        <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+        <script src="assets/script.js"></script>
+    </body>
+</html>
