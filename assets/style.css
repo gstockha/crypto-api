@@ -17,9 +17,43 @@ header h1::first-letter {
 #convert-btn {
     font-family: 'Staatliches', cursive;
     text-align: center;
+    width: 8%;
+    padding: 10px;
+    border-radius: 5px;
+    font-size: 30px;
+    margin-left: 590px;
 }
+#convert-btn:hover {
+    cursor: pointer;
+}
+
 #stats {
     text-align: center;
     font-family: 'Staatliches', cursive;
     font-size: larger;
+}
+
+#ascend-graph {
+    border-radius: 4px;
+    font-size: larger;
+    margin-left: 510px;
+    font-family: 'Staatliches', cursive;
+}
+
+#descend-graph {
+    border-radius: 4px;
+    font-size: larger;
+    font-family: 'Staatliches', cursive;
+}
+
+#undo-graph {
+    border-radius: 4px;
+    font-size: larger;
+    font-family: 'Staatliches', cursive;
+}
+
+#clear-graph {
+    border-radius: 4px;
+    font-size: larger;
+    font-family: 'Staatliches', cursive;
 }
