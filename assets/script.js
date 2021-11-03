@@ -959,7 +959,7 @@ function clearGraph(event){
 
 //only uncomment below when ready to test request, we have a limited number of requests!
 getCrypto(); //initialize API (on program start)
-//getStats();
+getStats();
 
 $convert.on("click",getSearch); //search button
 $("#undo-graph").on("click",undoGraph);

@@ -1,0 +1,25 @@
+header h1 {
+    text-align: center;
+    font-family: 'Staatliches', cursive;
+    font-size: 60px;
+}
+header h1::first-letter {
+    font-size: larger;
+}
+#price1, #price2 {
+    text-align: center;
+    font-family: 'Staatliches', cursive;
+}
+#convert-btn::first-letter {
+    font-size: larger;
+    font-family: 'Staatliches', cursive;
+}
+#convert-btn {
+    font-family: 'Staatliches', cursive;
+    text-align: center;
+}
+#stats {
+    text-align: center;
+    font-family: 'Staatliches', cursive;
+    font-size: larger;
+}
