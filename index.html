@@ -5,28 +5,37 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.6.0/Chart.min.js"></script>
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Staatliches&display=swap" rel="stylesheet">
         <link rel="iconsheet" href="https://cdnjs.cloudflare.com/ajax/libs/open-iconic/1.1.1/font/css/open-iconic-bootstrap.min.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
         <link rel="stylesheet" href="assets/style.css">
         <title>Crypto Cross</title>
 
     </head>
     <body>
         <header>
-            <h1>Crypto Cross</h1>
+            <h1>¢rypto Cross</h1>
         </header>
+        <div class="validate center">
         <div>
-            <div>
+            <div class="row card-panel">
+                <div class="col s6">
                 <h2 id="price1"></h2>
-                <input id="number1"># of Currency 1</input>
-                <input id="search1">Enter Currency 1</input>
-            </div>
-            <div>
+                <input id="number1">Enter Currency Quantity</input>
+                <input id="search1">Enter First Currency</input>
+                </div>
+            
+                <div class="col s6">
                 <h2 id="price2"></h2>
-                <input id="number2"># of Currency 2</input>
-                <input id="search2">Enter Currency 2</input>
+                <input id="number2">Enter Currency Quantity</input>
+                <input id="search2">Enter Second Currency</input>
+                </div>
             </div>
+        </div>
             <div>
-                <button id="convert-btn">Cross!</button> <!--convert button-->
+                <button id="convert-btn">¢ross!</button> <!--convert button-->
             </div>
             <div id="chart-container"> <!--put chart here-->
                 <canvas id="chart"></canvas>
@@ -74,6 +83,7 @@
                 </ul>
             </div>
         </div>
+    </div>
         <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
         <script src="assets/script.js"></script>
     </body>
