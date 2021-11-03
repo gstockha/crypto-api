@@ -23,3 +23,32 @@ header h1::first-letter {
     font-family: 'Staatliches', cursive;
     font-size: larger;
 }
+
+#convert-btn:hover {
+    cursor: pointer;
+}
+
+#ascend-graph {
+    border-radius: 4px;
+    font-size: larger;
+    margin-left: 510px;
+    font-family: 'Staatliches', cursive;
+}
+
+#descend-graph {
+    border-radius: 4px;
+    font-size: larger;
+    font-family: 'Staatliches', cursive;
+}
+
+#undo-graph {
+    border-radius: 4px;
+    font-size: larger;
+    font-family: 'Staatliches', cursive;
+}
+
+#clear-graph {
+    border-radius: 4px;
+    font-size: larger;
+    font-family: 'Staatliches', cursive;
+}
