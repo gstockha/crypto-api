@@ -17,11 +17,10 @@ header h1::first-letter {
 #convert-btn {
     font-family: 'Staatliches', cursive;
     text-align: center;
-    width: 8%;
+    width: 100px;
     padding: 10px;
     border-radius: 5px;
     font-size: 30px;
-    margin-left: 590px;
 }
 #convert-btn:hover {
     cursor: pointer;
@@ -39,7 +38,7 @@ header h1::first-letter {
 #ascend-graph {
     border-radius: 4px;
     font-size: larger;
-    margin-left: 510px;
+    /* margin-left: 40%; */
     font-family: 'Staatliches', cursive;
 }
 
@@ -84,6 +83,7 @@ header h1::first-letter {
     background-color: white;
     border-radius: 5px;
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
     box-shadow: 0 2px 4px rgba(0,0,0,0.2);
@@ -104,4 +104,17 @@ header h1::first-letter {
     font-size: larger;
     padding: 10px;
     width: 15%
+}
+
+#graph-buttons {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.input-field {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
 }

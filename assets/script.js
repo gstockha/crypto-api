@@ -71,7 +71,8 @@ function finishBrick(){ //finishing touches on cryptoBrick for the methods in ab
     firstDraw = false;
     let cryKeys = "";
     for (let i = 0; i < cryptoKeys.length; i++){
-        cryKeys += (", " + cryptoKeys[i]);
+        if (i>0) cryKeys += (", " + cryptoKeys[i]);
+        else cryKeys += (cryptoKeys[i]);
     }
     $list.append('<h4>').children('h4').append(cryKeys);
 }
