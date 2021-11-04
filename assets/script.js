@@ -17,35 +17,47 @@ let firstDraw = true; //don't save the draw graph on default draw
 function getCrypto(){ //initialization function to get crypto prices
     fetch(fetchCrypto).then((response)=>{ //fetch response from crypto api
         response.json().then((data)=>{ //convert from json
+            if (data.rates === undefined){
+                return getPlanB();
+            }
             cryptoBrick = data.rates; //save the subobject 'rates' of the data object to our object 'cryptoBrick'
             finishBrick();
             localStorage.setItem("brick",JSON.stringify(cryptoBrick));
         })
     })
     .catch((error)=>{ //if api fails, load last memoried one
+        getPlanB();
+    });
+}
+
+function getPlanB(){ //plan b for init function
+    let getPlanC = function(){
         let crypto = JSON.parse(localStorage.getItem("brick"));
         if (crypto != null){
             cryptoBrick = crypto;
             finishBrick();
-        } 
-        else fetch('https://api.coinlore.net/api/tickers/').then((response)=>{ //if that fails, refer to other api
-            response.json().then((data)=>{
-                let symbol;
-                let target;
-                console.log(data);
-                for (let i = 0; i < data.data.length; i++){
-                    target = data.data[i];
-                    
-                    symbol = target["symbol"];
-                    cryptoBrick[symbol] = target["price_usd"];
-                }
-                localStorage.setItem("brick",JSON.stringify(cryptoBrick));
-                finishBrick();
-            })
+        }
+        else alert('Crypto data not found!');
+    }
+    fetch('https://api.coinlore.net/api/tickers/').then((response)=>{ //if that fails, refer to other api
+        response.json().then((data)=>{
+            let symbol;
+            let target;
+            console.log(data);
+            if (data.data === undefined){
+                return getPlanC();
+            }
+            for (let i = 0; i < data.data.length; i++){
+                target = data.data[i];
+                symbol = target["symbol"];
+                cryptoBrick[symbol] = target["price_usd"];
+            }
+            localStorage.setItem("brick",JSON.stringify(cryptoBrick));
+            finishBrick();
         })
-        .catch((error)=>{
-            alert('Crypto data not found!');
-        });
+    })
+    .catch((error)=>{
+        getPlanC();
     });
 }
 
@@ -89,14 +101,18 @@ function compareRates(obj,targRate,rate1,rate2,save){ //compare numbers & prices
             }
         }
         else{ //if one or both aren't valid, default to 1 USD each
-            target1 = 1;
-            target2 = 1;
+            target1 = multRate;
+            target2 = multRate;
         }
     }
     else{ //1:1 comparison
-        if (target1 > target2){ //prioritize top element
+        if (target1 > target2){
             target2 = target1 / target2;
             target1 = 1;
+        }
+        else if (target2 > target1){
+            target1 = target2 / target1;
+            target2 = 1;
         }
         else{
             target1 = 1;
@@ -236,7 +252,7 @@ $("#ascend-graph").on("click",(event)=>{
     console.log('ascend');
     if (graphList.length < 2) return false;
     lastList = saveLastList(graphList); //save
-    graphList = graphList.sort((a,b) => b[1] - a[1]); //sort list descending
+    graphList = graphList.sort((a,b) => b[1] - a[1]); //sort list ascending
     drawOnGraph(graphList.length);
 });
 $("#descend-graph").on("click",(event)=>{
