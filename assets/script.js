@@ -4,6 +4,10 @@ const $price = [$("#price1"),$("#price2")]; //price display
 const $count = [document.querySelector("#number1"),document.querySelector("#number2")]; //currency number input field
 const $convert = $("#convert-btn"); //convert button
 const $stats = $("#stats"); //stat list
+const $open = document.getElementById('open');
+const $modal = document.getElementById('modal-container');
+const $close = document.getElementById('close');
+const $list = $("#search-list");
 let multRate = 1; //multiplication rate
 let defaultCrypto = ["DOGE","USD"];
 let defaultTarget = 0; //for comparison order
@@ -31,14 +35,6 @@ function getCrypto(){ //initialization function to get crypto prices
 }
 
 function getPlanB(){ //plan b for init function
-    let getPlanC = function(){
-        let crypto = JSON.parse(localStorage.getItem("brick"));
-        if (crypto != null){
-            cryptoBrick = crypto;
-            finishBrick();
-        }
-        else alert('Crypto data not found!');
-    }
     fetch('https://api.coinlore.net/api/tickers/').then((response)=>{ //if that fails, refer to other api
         response.json().then((data)=>{
             let symbol;
@@ -57,7 +53,12 @@ function getPlanB(){ //plan b for init function
         })
     })
     .catch((error)=>{
-        getPlanC();
+        let crypto = JSON.parse(localStorage.getItem("brick"));
+        if (crypto != null){
+            cryptoBrick = crypto;
+            finishBrick();
+        }
+        else console.log('Crypto data not found!');
     });
 }
 
@@ -67,6 +68,9 @@ function finishBrick(){ //finishing touches on cryptoBrick for the methods in ab
     cryptoKeys = Object.keys(cryptoBrick); //fill out an array of keys (crypto names like ETH, BTC, DOGE etc) for later
     compareRates(cryptoBrick,defaultTarget,defaultCrypto[0],defaultCrypto[1],false); //run a default compare function between BTC and USD
     firstDraw = false;
+    for (let i = 0; i < cryptoKeys.length; i++){
+        $list.append('<h4>').children('h4')[i].append(cryptoKeys[i]);
+    }
 }
 
 function getStats(){ //get global market data
@@ -82,7 +86,7 @@ function getStats(){ //get global market data
         })
     })
     .catch((error)=>{
-        alert('Market stat request denied!');
+        console.log('Market stat request denied!');
     })
 }
 
@@ -146,7 +150,7 @@ function getSearch(event){ //get the search string from input
             str[i] = str[i].toUpperCase(); //convert to uppercase
             //if the cryptoList doesn't inlude the string key and it's not USD
             if ((cryptoKeys.includes(str[i]) === false) && (str[i] !== "USD")){
-                return alert("Currency " + (i + 1) + " not a valid entry!");
+                return console.log("Currency " + (i + 1) + " not a valid entry!");
             }
             else{ //if it's in the list
                 let rate = Number($count[i].value.trim()); //get the number of the input field
@@ -271,4 +275,18 @@ $count[0].addEventListener("focus", (event)=>{
 $count[1].addEventListener("focus", (event)=>{
     event.preventDefault();
     $count[0].value = "";
+});
+//modal
+$open.addEventListener('click', (event)=>{
+    event.preventDefault();
+    $modal.classList.add('show');
+
+});
+$close.addEventListener('click', (event)=>{
+    event.preventDefault();
+    $modal.classList.remove('show');
+});
+$modal.addEventListener('click', (event)=>{ //can just click off of it too
+    event.preventDefault();
+    $modal.classList.remove('show');
 });
