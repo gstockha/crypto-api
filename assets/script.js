@@ -1,5 +1,4 @@
-//const fetchCrypto = "http://api.coinlayer.com/api/live?access_key=370288340efa1d60fd362618b351ed65"; //DO THIS ONE
-const fetchCrypto = "http://api.coinlayer.com/api/live?access_key=fd26c812745fbb46a546eb54224dd5eb"; //api url + key
+const fetchCrypto = "http://api.coinlayer.com/api/live?access_key=370288340efa1d60fd362618b351ed65"; //DO THIS ONE
 const $search = [document.querySelector("#search1"),document.querySelector("#search2")]; //text box
 const $price = [$("#price1"),$("#price2")]; //price display
 const $count = [document.querySelector("#number1"),document.querySelector("#number2")]; //currency number input field
