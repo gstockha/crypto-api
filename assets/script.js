@@ -1,3 +1,4 @@
+//const fetchCrypto = "http://api.coinlayer.com/api/live?access_key=370288340efa1d60fd362618b351ed65"; //DO THIS ONE
 const fetchCrypto = "http://api.coinlayer.com/api/live?access_key=fd26c812745fbb46a546eb54224dd5eb"; //api url + key
 const $search = [document.querySelector("#search1"),document.querySelector("#search2")]; //text box
 const $price = [$("#price1"),$("#price2")]; //price display
@@ -68,9 +69,11 @@ function finishBrick(){ //finishing touches on cryptoBrick for the methods in ab
     cryptoKeys = Object.keys(cryptoBrick); //fill out an array of keys (crypto names like ETH, BTC, DOGE etc) for later
     compareRates(cryptoBrick,defaultTarget,defaultCrypto[0],defaultCrypto[1],false); //run a default compare function between BTC and USD
     firstDraw = false;
+    let cryKeys = "";
     for (let i = 0; i < cryptoKeys.length; i++){
-        $list.append('<h4>').children('h4')[i].append(cryptoKeys[i]);
+        cryKeys += (", " + cryptoKeys[i]);
     }
+    $list.append('<h4>').children('h4').append(cryKeys);
 }
 
 function getStats(){ //get global market data
