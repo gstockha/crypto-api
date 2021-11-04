@@ -1,11 +1,47 @@
-@media only screen and (max-width: 768px){
-.container {
-    width: 85% !important;
+header h1 {
+    text-align: center;
+    font-family: 'Staatliches', cursive;
+    font-size: 60px;
 }
+header h1::first-letter {
+    font-size: larger;
+}
+#price1, #price2 {
+    text-align: center;
+    font-family: 'Staatliches', cursive;
+}
+#convert-btn::first-letter {
+    font-size: larger;
+    font-family: 'Staatliches', cursive;
+    
+}
+#convert-btn {
+    font-family: 'Staatliches', cursive;
+    text-align: center;
+    /*width: 135px;*/
+    height: 60px;
+    margin-bottom: 20px;
+}
+#convert-btn :hover{
+    background-color: chartreuse;
+}
+.conv-btn{
+    font-size: 18px;
+}
+#stats {
+    text-align: center;
+    font-family: 'Staatliches', cursive;
+    font-size: larger;
 }
 
-@media only screen and (min-width: 768px){
-        .container {
-            width: 50% !important;
-        }
+.cont1{
+    margin-right: 30px;
+    margin-left: -30px !important;
 }
+
+.cont2{
+    margin-right: -30px;
+}
+
+
+    
