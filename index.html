@@ -72,6 +72,14 @@
                     </div>
             <div>
                 <button id="convert-btn">¢ross!</button> <!--convert button-->
+                <button id="open" class="modal-button"><img src="assets/magglass.png" alt="search" width="25" height="25"></button>
+                <div class="modal-container" id="modal-container">
+                    <div class="modal">
+                        <h3>Crpyto List</h3>
+                        <div id="search-list"></div>
+                        <button id="close" class="modal-button">OK</button>
+                    </div>
+                </div>
             </div>
             <div id="chart-container"> <!--put chart here-->
                 <canvas id="chart"></canvas>
@@ -91,7 +99,8 @@
                             title:{
                                 display:true,
                                 text:'Crypto to USD',
-                                fontSize:22
+                                fontSize:22,
+                                position: 'bottom'
                             },
                             legend:{ 
                                 display:false
