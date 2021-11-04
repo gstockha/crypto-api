@@ -18,24 +18,68 @@
         <header>
             <h1>¢rypto Cross</h1>
         </header>
-        <div class="validate center">
-        <div>
-            <div class="row card-panel">
-                <div class="col s6">
-                <h2 id="price1"></h2>
-                <input id="number1">Enter Currency Quantity</input>
-                <input id="search1">Enter First Currency</input>
+        <div class="container cont">
+            <div class="row">
+                <div class="col s5">
+                    <div class="row">
+                        <div class="col s2"></div>
+                        <div class="input-field col s8">
+                            
+                        </div>
+                        <div class="col s2"></div>
+                    </div>
+                    <div class="row card-panel">
+                        <div class="col s2"></div>
+                        <div class="input-field col s8">
+                            <h2 id="price1"></h2>
+                            <input id="number1"> Quantity </input>
+                            <input id="search1">First Currency </input>
+    
+                        </div>
+                        <div class="col s2"></div>
+                        <div class="col s1"></div>
+                        <div class="col s10 center-align">
+                            
+                        </div>
+                        <div class="col s1"></div>
+                    </div>
                 </div>
-            
-                <div class="col s6">
-                <h2 id="price2"></h2>
-                <input id="number2">Enter Currency Quantity</input>
-                <input id="search2">Enter Second Currency</input>
-                </div>
-            </div>
-        </div>
-            <div>
+                <div class="col s2"></div>
+                <div class="col s5">
+                    <div class="row">
+                        <div class="col s2"></div>
+                        <div class="input-field col s8">
+                            
+                        </div>
+                        <div class="col s2"></div>
+                    </div>
+                    <div class="row card-panel">
+                        <div class="col s2"></div>
+                        <div class="input-field col s8">
+                            <h2 id="price2"></h2>
+                            <input id="number2">Quantity</input>
+                            <input id="search2">Second Currency</input>
+    
+                        </div>
+                        <div class="col s2"></div>
+                        <div class="col s1"></div>
+                        <div class="col s10 center-align">
+                            
+                        </div>
+                        <div class="col s1"></div>
+                    </div>
+                    </div>
+                    </div>
+            <div id="graph-buttons">
                 <button id="convert-btn">¢ross!</button> <!--convert button-->
+                <button id="open" class="modal-button"><img src="assets/magglass.png" alt="search" width="25" height="25"></button>
+                <div class="modal-container" id="modal-container">
+                    <div class="modal">
+                        <h3>Crypto List</h3>
+                        <div id="search-list"></div>
+                        <button id="close" class="modal-button">OK</button>
+                    </div>
+                </div>
             </div>
             <div id="chart-container"> <!--put chart here-->
                 <canvas id="chart"></canvas>
@@ -55,7 +99,8 @@
                             title:{
                                 display:true,
                                 text:'Crypto to USD',
-                                fontSize:22
+                                fontSize:22,
+                                position: 'bottom'
                             },
                             legend:{ 
                                 display:false
@@ -71,10 +116,10 @@
                     });
                 </script>
                 <div id="graph-buttons">
-                    <button id="ascend-graph" class="oi oi-arrow-thick-top mr-2"></button>
-                    <button id="descend-graph" class="oi oi-arrow-thick-bottom mr-2"></button>
-                    <button id="undo-graph" class="oi oi-undo mr-2"></button>
-                    <button id="clear-graph" class="oi oi-circle-x mr-2"></button>
+                    <button id="ascend-graph">Ascend</button>
+                    <button id="descend-graph">Descend</button>
+                    <button id="undo-graph">Undo</button>
+                    <button id="clear-graph">Clear</button>
                 </div>
             </div>
             <div> <!--display market cap and other data PUT ON THE RIGHT SIDE?-->
