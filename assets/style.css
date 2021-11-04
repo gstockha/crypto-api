@@ -13,7 +13,7 @@ header h1::first-letter {
 #convert-btn::first-letter {
     font-size: larger;
     font-family: 'Staatliches', cursive;
-    
+
 }
 #convert-btn {
     font-family: 'Staatliches', cursive;
@@ -27,7 +27,7 @@ header h1::first-letter {
 }
 .conv-btn{
     font-size: 18px;
-}
+
 #stats {
     text-align: center;
     font-family: 'Staatliches', cursive;
@@ -43,5 +43,3 @@ header h1::first-letter {
     margin-right: -30px;
 }
 
-
-    
