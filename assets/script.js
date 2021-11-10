@@ -1,13 +1,14 @@
-const fetchCrypto = "http://api.coinlayer.com/api/live?access_key=370288340efa1d60fd362618b351ed65"; //DO THIS ONE
+const fetchCrypto = "http://api.coinlayer.com/api/live?access_key=370288340efa1d60fd362618b351ed65";
 const $search = [document.querySelector("#search1"),document.querySelector("#search2")]; //text box
 const $price = [$("#price1"),$("#price2")]; //price display
 const $count = [document.querySelector("#number1"),document.querySelector("#number2")]; //currency number input field
 const $convert = $("#convert-btn"); //convert button
 const $stats = $("#stats"); //stat list
-const $open = document.getElementById('open');
+const $open = [document.getElementById('open1'),document.getElementById('open2')];
 const $modal = document.getElementById('modal-container');
 const $close = document.getElementById('close');
 const $list = $("#search-list");
+const $clist = $("#choose-list");
 let multRate = 1; //multiplication rate
 let defaultCrypto = ["DOGE","USD"];
 let defaultTarget = 0; //for comparison order
@@ -17,8 +18,29 @@ let cryptoKeys = []; //empty cryptoBrick keys list
 let graphList = [];
 let lastList = [];
 let firstDraw = true; //don't save the draw graph on default draw
+let modalMode = 0;
 
 function getCrypto(){ //initialization function to get crypto prices
+    fetch(fetchCrypto).then((response)=>{ //fetch response from crypto api
+        response.json().then((data)=>{ //convert from json
+            if (data.rates === undefined){
+                return getPlanB();
+            }
+            cryptoBrick = data.rates; //save the subobject 'rates' of the data object to our object 'cryptoBrick'
+            finishBrick();
+            localStorage.setItem("brick",JSON.stringify(cryptoBrick));
+        })
+    })
+    .catch((error)=>{ //if api fails, load last memoried one
+        let crypto = JSON.parse(localStorage.getItem("brick"));
+        if (crypto != null){
+            cryptoBrick = crypto;
+            finishBrick();
+        }
+    });
+}
+
+function getPlanB(){ //plan b for init function
     fetch('https://api.coinlore.net/api/tickers/').then((response)=>{ //if that fails, refer to other api
         response.json().then((data)=>{
             let symbol;
@@ -34,22 +56,6 @@ function getCrypto(){ //initialization function to get crypto prices
             }
             localStorage.setItem("brick",JSON.stringify(cryptoBrick));
             finishBrick();
-        })
-    })
-    .catch((error)=>{ //if api fails, load last memoried one
-        getPlanB();
-    });
-}
-
-function getPlanB(){ //plan b for init function
-    fetch(fetchCrypto).then((response)=>{ //fetch response from crypto api
-        response.json().then((data)=>{ //convert from json
-            if (data.rates === undefined){
-                return getPlanB();
-            }
-            cryptoBrick = data.rates; //save the subobject 'rates' of the data object to our object 'cryptoBrick'
-            finishBrick();
-            localStorage.setItem("brick",JSON.stringify(cryptoBrick));
         })
     })
     .catch((error)=>{
@@ -68,12 +74,16 @@ function finishBrick(){ //finishing touches on cryptoBrick for the methods in ab
     cryptoKeys = Object.keys(cryptoBrick); //fill out an array of keys (crypto names like ETH, BTC, DOGE etc) for later
     compareRates(cryptoBrick,defaultTarget,defaultCrypto[0],defaultCrypto[1],false); //run a default compare function between BTC and USD
     firstDraw = false;
-    let cryKeys = "";
     for (let i = 0; i < cryptoKeys.length; i++){
-        if (i>0) cryKeys += (", " + cryptoKeys[i]);
-        else cryKeys += (cryptoKeys[i]);
+        $clist.append("<button>");
+        $clist.children("button")[i].append(cryptoKeys[i]);
     }
-    $list.append('<h4>').children('h4').append(cryKeys);
+    // let cryKeys = "";
+    // for (let i = 0; i < cryptoKeys.length; i++){
+    //     if (i>0) cryKeys += (", " + cryptoKeys[i]);
+    //     else cryKeys += (cryptoKeys[i]);
+    // }
+    // $list.append('<h4>').children('h4').append(cryKeys);
 }
 
 function getStats(){ //get global market data
@@ -280,10 +290,17 @@ $count[1].addEventListener("focus", (event)=>{
     $count[0].value = "";
 });
 //modal
-$open.addEventListener('click', (event)=>{
+for (let i = 0; i < 2; i++){
+    $open[i].addEventListener('click', (event)=>{
+        event.preventDefault();
+        modalMode = i;
+        $modal.classList.add('show');
+    });
+}
+$clist.on('click', (event)=>{
     event.preventDefault();
-    $modal.classList.add('show');
-
+    console.log(event.target.innerHTML);
+    $search[modalMode].value = event.target.innerHTML;
 });
 $close.addEventListener('click', (event)=>{
     event.preventDefault();
