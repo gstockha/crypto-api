@@ -1,4 +1,4 @@
-const fetchCrypto = "http://api.coinlayer.com/api/live?access_key=370288340efa1d60fd362618b351ed65";
+const fetchCrypto = "https://api.coinlayer.com/api/live?access_key=370288340efa1d60fd362618b351ed65";
 const $search = [document.querySelector("#search1"),document.querySelector("#search2")]; //text box
 const $price = [$("#price1"),$("#price2")]; //price display
 const $count = [document.querySelector("#number1"),document.querySelector("#number2")]; //currency number input field
